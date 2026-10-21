@@ -4,6 +4,11 @@ Python + pygame front-end with mpv as the video back-end.
 
 ![Application interface demo on device](demo.png)
 
+Tested on Knulli `scarab-20260511`:
+- Python: 3.12.8
+- pygame: 2.5.2 (SDL 2.32.8)
+- mpv: /usr/bin/mpv
+
 ## Install
 Copy the contents of `ports/` to `/userdata/roms/ports/` on the device
 (you get `OnlineTV.sh` plus the `onlinetv/` folder), then refresh the game list.
