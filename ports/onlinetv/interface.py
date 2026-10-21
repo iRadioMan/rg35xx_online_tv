@@ -25,16 +25,18 @@ BLUE_BOT = (37, 99, 235)
 # --- layout (from PROJECT.md) --------------------------------------------------
 PREVIEW = pygame.Rect(39, 19, 450, 360)
 BUTTONS = {
-    "prev":     pygame.Rect(142, 392, 64, 64),
-    "play":     pygame.Rect(233, 392, 64, 64),
-    "next":     pygame.Rect(321, 392, 64, 64),
-    "list":     pygame.Rect(530, 390, 64, 64),    
-    "settings": pygame.Rect(531, 100, 64, 64),
+    "prev":     pygame.Rect(142, 397, 64, 64),
+    "play":     pygame.Rect(233, 397, 64, 64),
+    "next":     pygame.Rect(321, 397, 64, 64),
+    "list":     pygame.Rect(530, 397, 64, 64),
+    # "settings": pygame.Rect(531, 100, 64, 64),
+    "info":     pygame.Rect(531, 100, 64, 64),
     "exit":     pygame.Rect(531, 20, 64, 64),
 }
 ICON_COLORS = {
     "prev": BLUE, "play": TEAL, "next": BLUE,
-    "list": PURPLE, "settings": YELLOW, "exit": RED,
+    "list": PURPLE, "settings": YELLOW,
+    "info": WHITE, "exit": RED,
 }
 
 
@@ -119,9 +121,13 @@ class Interface:
                 y = cy + i * 10
                 d.line(s, color, (cx - 14, y), (cx + 14, y), 2)
                 d.circle(s, color, (cx + kx, y), 5, 3)
+        elif name == "info":
+                d.circle(s, color, (cx, cy - 16), 3, 3)
+                d.line(s, color, (cx, cy - 8), (cx, cy + 12), 3)
+                # d.line(s, color, (cx - 6, cy + 14), (cx + 6, cy + 14), 3)
         elif name == "exit":
-            d.arc(s, color, pygame.Rect(cx - 12, cy - 10, 24, 24),
-                  math.radians(130), math.radians(410), 3)
+            d.arc(s, color, pygame.Rect(cx - 11, cy - 10, 24, 24),
+                math.radians(130), math.radians(410), 2)
             d.line(s, color, (cx, cy - 14), (cx, cy - 1), 3)
 
     def _button(self, name, focused, playing=False):
@@ -209,10 +215,10 @@ class Interface:
         self._hint("A  Play     B  Back     Left/Right  Page")
         pygame.display.flip()
 
-    # --------------------------------------------------------------- settings
-    def draw_settings(self, rows):
+    # --------------------------------------------------------------- info
+    def draw_info(self, rows):
         self.screen.fill(BG)
-        self._text(self.f_title, "Settings", (32, 20))
+        self._text(self.f_title, "Technical information", (32, 20))
         panel = pygame.Rect(32, 76, W - 64, H - 76 - 52)
         pygame.draw.rect(self.screen, PANEL, panel, border_radius=18)
         pygame.draw.rect(self.screen, OUTLINE, panel, 1, border_radius=18)

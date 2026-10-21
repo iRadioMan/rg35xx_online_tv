@@ -29,7 +29,7 @@ KEY_MAP = {pygame.K_RETURN: "A", pygame.K_z: "A", pygame.K_ESCAPE: "B", pygame.K
            pygame.K_LEFT: "LEFT", pygame.K_RIGHT: "RIGHT",
            pygame.K_UP: "UP", pygame.K_DOWN: "DOWN"}
 
-MAIN, LIST, SETTINGS, FULL = "main", "list", "settings", "full"
+MAIN, LIST, SETTINGS, INFO, FULL = "main", "list", "settings", "info", "full"
 
 DEBUG = os.environ.get("APP_DEBUG") == "1"
 log = logging.getLogger("onlinetv")
@@ -158,7 +158,7 @@ class App:
 
     def handle(self, act):
         {MAIN: self.on_main, LIST: self.on_list,
-         SETTINGS: self.on_settings, FULL: self.on_full}[self.state](act)
+         INFO: self.on_info, FULL: self.on_full}[self.state](act)
 
     def on_main(self, act):
         if act in ("LEFT", "RIGHT", "UP", "DOWN"):
@@ -181,7 +181,7 @@ class App:
         elif act == "B":
             self.state = MAIN
 
-    def on_settings(self, act):
+    def on_info(self, act):
         if act == "B":
             self.state = MAIN
 
@@ -232,8 +232,8 @@ class App:
             if self.channels:
                 self.state = LIST
                 self.list_sel = self.index
-        elif name == "settings":
-            self.state = SETTINGS
+        elif name == "info":
+            self.state = INFO
             self.info_rows = self.collect_info()
         elif name == "exit":
             self.running = False
@@ -271,7 +271,7 @@ class App:
         self.acquire_display()
         self.state = MAIN
 
-    # --------------------------------------------------------------- settings
+    # --------------------------------------------------------------- info
     def collect_info(self):
         def mem():
             try:
@@ -320,8 +320,8 @@ class App:
             self.ui.draw_main(self.focus, self.status, name, self.index, len(self.channels))
         elif self.state == LIST:
             self.ui.draw_list(self.channels, self.list_sel, self.index)
-        elif self.state == SETTINGS:
-            self.ui.draw_settings(self.info_rows)
+        elif self.state == INFO:
+            self.ui.draw_info(self.info_rows)
         # FULL: mpv owns the screen, nothing to draw
 
     def run(self):

@@ -2,9 +2,12 @@
 
 Python + pygame front-end with mpv as the video back-end.
 
+![Application interface demo on device](demo.png)
+
 ## Install
 Copy the contents of `ports/` to `/userdata/roms/ports/` on the device
 (you get `OnlineTV.sh` plus the `onlinetv/` folder), then refresh the game list.
+Don't forget to connect to the Wi-Fi network!
 
 ## Controls
 D-pad moves focus, **A** activates, **B** goes back / leaves full-screen / closes list and settings.
@@ -32,3 +35,4 @@ Edit `ports/onlinetv/channels.json` (`name` + `url` per channel). The bundled en
 
 - Store channel logos in channels.json
 - Radio stations support? :>
+- Settings?
