@@ -1,0 +1,30 @@
+{
+    "version": 4,
+    "name": "rg35xx_online_tv.zip",
+    "items": [
+        "OnlineTV.sh",
+        "onlinetv"
+    ],
+    "items_opt": null,
+    "attr": {
+        "title": "Online TV",
+        "porter": [
+            "rad.io"
+        ],
+        "desc": "Online TV app for Anbernic RG35XXPRO",
+        "desc_md": null,
+        "inst": "Ready to run out of the box, no additional files needed.",
+        "inst_md": null,
+        "genres": [
+            "other"
+        ],
+        "image": {},
+        "rtr": true,
+        "exp": false,
+        "runtime": null,
+        "reqs": [],
+        "arch": [
+            "aarch64"
+        ]
+    }
+}
