@@ -29,7 +29,8 @@ Env overrides: `MPV_VO`, `MPV_HWDEC` (default `no`, software decoding).
 and mpv's stderr to `onlinetv/mpv.log`.
 
 ## Channels
-Edit `ports/onlinetv/channels.json` (`name` + `url` per channel). The bundled entries are public test streams.
+Edit `ports/onlinetv/channels.json` (`name`, `url` and `type` per channel). The bundled entries are public test streams.
+Type values are `tv` and `radio`.
 
 ## Files
 - `main.py` - state machine (main / list / settings / full-screen), input, focus navigation
@@ -39,5 +40,4 @@ Edit `ports/onlinetv/channels.json` (`name` + `url` per channel). The bundled en
 ### TODO
 
 - Store channel logos in channels.json
-- Radio stations support? :>
 - Settings?

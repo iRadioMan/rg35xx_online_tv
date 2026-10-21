@@ -142,6 +142,10 @@ class Interface:
             color = ICON_COLORS[name]
         self._icon(name, r, color, playing)
 
+    def _logo(self):
+        pygame.draw.rect(self.screen, WHITE, (175, 45, 180, 180))
+        # TODO: draw channel logo
+
     # ------------------------------------------------------------ main window
     def draw_main(self, focus, status, channel_name, index, total):
         self.screen.fill(BG)
@@ -156,9 +160,11 @@ class Interface:
             "error": "Stream stopped unexpectedly",
             "empty": "No channels in channels.json",
         }
-        self._text(self.f_title, channel_name or "OnlineTV", (c[0], c[1] - 18),
+
+        self._logo()
+        self._text(self.f_title, channel_name or "OnlineTV", (c[0], c[1] + 65),
                    WHITE, True, PREVIEW.w - 40)
-        self._text(self.f_body, labels.get(status, ""), (c[0], c[1] + 20),
+        self._text(self.f_body, labels.get(status, ""), (c[0], c[1] + 110),
                    RED if status in ("error", "empty") else GRAY, True)
         if total:
             self._text(self.f_small, f"{index + 1} / {total}",

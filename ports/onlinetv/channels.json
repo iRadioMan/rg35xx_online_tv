@@ -2,23 +2,33 @@
   "channels": [
     {
       "name": "Первый канал (576p)",
-      "url": "http://31.148.5.241/kanal_1/index.m3u8"
+      "url": "http://31.148.5.241/kanal_1/index.m3u8",
+      "type": "tv"
     },
     {
       "name": "Россия 1 (576p)",
-      "url": "http://31.148.5.241/kanal_2/index.m3u8"
+      "url": "http://31.148.5.241/kanal_2/index.m3u8",
+      "type": "tv"
     },
-	{
+	  {
       "name": "СТС (576p)",
-      "url": "http://31.148.5.241/kanal_13/index.m3u8"
+      "url": "http://31.148.5.241/kanal_13/index.m3u8",
+      "type": "tv"
     },
     {
       "name": "ТНТ (576p)",
-      "url": "http://31.148.5.241/kanal_19/index.m3u8"
+      "url": "http://31.148.5.241/kanal_19/index.m3u8",
+      "type": "tv"
     },
-	{
-	  "name": "Пятница (576p)",
-      "url": "http://31.148.5.241/kanal_16/index.m3u8"
-	}
+	  {
+	    "name": "Пятница (576p)",
+      "url": "http://31.148.5.241/kanal_16/index.m3u8",
+      "type": "tv"
+	  },
+	  {
+	    "name": "HeartFM Барнаул (radio test)",
+      "url": "https://icecast.gtrk22.ru:8443/heartfm",
+      "type": "radio"
+	  }
   ]
 }

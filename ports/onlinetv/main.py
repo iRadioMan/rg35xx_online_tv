@@ -48,7 +48,7 @@ def load_channels():
     try:
         with open(os.path.join(BASE, "channels.json"), encoding="utf-8") as f:
             data = json.load(f)
-        return [c for c in data.get("channels", []) if c.get("name") and c.get("url")]
+        return [c for c in data.get("channels", []) if c.get("name") and c.get("url") and c.get("type")]
     except (OSError, ValueError):
         log.exception("cannot load channels.json")
         return []
@@ -244,20 +244,21 @@ class App:
             return
         self.index = idx % len(self.channels)
         self.status = "stopped"
-        log.debug("selected #%d %s", self.index, self.channels[self.index]["name"])
+        log.debug("selected #%d %s type: %s", self.index, self.channels[self.index]["name"], self.channels[self.index]["type"])
 
     def play_channel(self, idx):
         if not self.channels:
             return
         self.index = idx % len(self.channels)
         ch = self.channels[self.index]
-        log.info("play #%d %s %s", self.index, ch["name"], ch["url"])
-        if self.state != FULL:
+        log.info("play #%d %s %s %s", self.index, ch["name"], ch["url"], ch["type"])
+        if self.state != FULL and ch["type"] == "tv":
             self.release_display()
         ok = self.player.play(ch["url"])
         if ok:
             self.status = "playing"
-            self.state = FULL
+            if ch["type"] == "tv":
+                self.state = FULL
         else:
             self.status = "error"
             self.leave_playback()
