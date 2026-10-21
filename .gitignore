@@ -1,0 +1,8 @@
+# Project docs (development)
+/!docs/
+
+# Ignore all log files anywhere in the project
+*.log
+
+# Python cache
+__pycache__/
