@@ -9,3 +9,6 @@
 
 # Python cache
 __pycache__/
+
+# PC debugging
+start_pc.cmd
