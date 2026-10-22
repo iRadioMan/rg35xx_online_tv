@@ -227,7 +227,10 @@ class App:
         elif name == "next":
             self.select_channel(self.index + 1)
         elif name == "play":
-            self.play_channel(self.index)      # video is always full-screen on this device
+            if self.status == "stopped":
+                self.play_channel(self.index)
+            else:
+                self.stop_playback()
         elif name == "list":
             if self.channels:
                 self.state = LIST
@@ -252,13 +255,16 @@ class App:
         self.index = idx % len(self.channels)
         ch = self.channels[self.index]
         log.info("play #%d %s %s %s", self.index, ch["name"], ch["url"], ch["type"])
-        if self.state != FULL and ch["type"] == "tv":
+        if self.state != FULL and ch["type"] == "tv": # release display only when we are not in fullscreen and start playing TV
             self.release_display()
         ok = self.player.play(ch["url"])
         if ok:
             self.status = "playing"
             if ch["type"] == "tv":
-                self.state = FULL
+                # TODO: loading screen??
+                self.state = FULL # go to fullscreen playback if tv is playing
+            else:
+                self.leave_playback() # leave fullscreen playback if radio is playing
         else:
             self.status = "error"
             self.leave_playback()

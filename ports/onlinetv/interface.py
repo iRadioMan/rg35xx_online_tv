@@ -165,7 +165,7 @@ class Interface:
         c = PREVIEW.center
         labels = {
             "stopped": "Press Play to start",
-            "playing": "Loading…",
+            "playing": "Playing…",
             "paused": "Paused",
             "error": "Stream stopped unexpectedly",
             "empty": "No channels in channels.json",

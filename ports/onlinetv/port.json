@@ -3,7 +3,7 @@
     "name": "rg35xx_online_tv.zip",
     "items": [
         "OnlineTV.sh",
-        "onlinetv"
+        "onlinetv/"
     ],
     "items_opt": null,
     "attr": {
@@ -18,7 +18,12 @@
         "genres": [
             "other"
         ],
-        "image": {},
+        "image": {
+            "screenshot": "screenshot.png",
+            "covers": [],
+            "thumbnail": null,
+            "video": null
+        },
         "rtr": true,
         "exp": false,
         "runtime": null,
