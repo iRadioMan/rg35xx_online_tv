@@ -7,11 +7,11 @@ import platform
 import signal
 import subprocess
 import sys
-
+import threading
 import pygame
 
 from interface import BUTTONS, H, W, Interface
-from mpv import MpvPlayer
+from mpv import PROBE_TIMEOUT, MpvPlayer, needs_probe, probe_stream
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -91,6 +91,9 @@ class App:
         self.index = 0
         self.status = "stopped" if self.channels else "empty"   # stopped/playing/paused/error/empty
         self.list_sel = 0
+        self.message = ""            # error text shown in the preview area
+        self.probe_token = 0         # identifies the current URL pre-check
+        self.probe_result = None     # (token, ok, reason) set by the worker thread
         self.info_rows = []
         self.running = True
         self.clock = pygame.time.Clock()
@@ -161,6 +164,12 @@ class App:
          INFO: self.on_info, FULL: self.on_full}[self.state](act)
 
     def on_main(self, act):
+        if self.status == "connecting":           # URL pre-check running: only B (cancel)
+            if act == "B":
+                self.probe_token += 1
+                self.status = "stopped"
+                log.info("connection cancelled")
+            return
         if act in ("LEFT", "RIGHT", "UP", "DOWN"):
             self.move_focus(act)
         elif act == "A":
@@ -196,9 +205,9 @@ class App:
                 self.player.set_pause(False)
                 self.status = "playing"
         elif act == "LEFT":
-            self.play_channel(self.index - 1)
+            self.play_channel(self.index - 1, probe=False)
         elif act == "RIGHT":
-            self.play_channel(self.index + 1)
+            self.play_channel(self.index + 1, probe=False)
 
     # ------------------------------------------------------------------ focus
     def move_focus(self, act):
@@ -227,10 +236,10 @@ class App:
         elif name == "next":
             self.select_channel(self.index + 1)
         elif name == "play":
-            if self.channels[self.index]["type"] == "radio" and self.status != "stopped":
-                self.stop_playback()
-            else:
+            if self.channels[self.index]["type"] == "tv" or self.status != "playing":
                 self.play_channel(self.index)
+            else:
+                self.stop_playback()
         elif name == "list":
             if self.channels:
                 self.state = LIST
@@ -247,20 +256,49 @@ class App:
             return
         self.index = idx % len(self.channels)
         self.status = "stopped"
+        self.message = ""
         log.debug("selected #%d %s type: %s", self.index, self.channels[self.index]["name"], self.channels[self.index]["type"])
 
-    def play_channel(self, idx):
+    def play_channel(self, idx, probe=True):
         if not self.channels:
             return
         self.index = idx % len(self.channels)
         ch = self.channels[self.index]
+        self.message = ""
         log.info("play #%d %s %s %s", self.index, ch["name"], ch["url"], ch["type"])
+        if probe and self.state != FULL and needs_probe(ch["url"]):
+            # Check the URL in the background first; the UI shows "Connecting..." and B cancels.
+            self.state = MAIN
+            self.status = "connecting"
+            self.probe_token += 1
+            token, url = self.probe_token, ch["url"]
+
+            def work():
+                ok, reason = probe_stream(url, PROBE_TIMEOUT)
+                log.info("probe %s -> %s (%s)", url, ok, reason)
+                self.probe_result = (token, ok, reason)
+            threading.Thread(target=work, daemon=True).start()
+            return
+        self.start_mpv(ch)
+
+    def tick_probe(self):
+        res, self.probe_result = self.probe_result, None
+        if not res:
+            return
+        token, ok, reason = res
+        if token != self.probe_token or self.status != "connecting":
+            return                                # cancelled or superseded
+        if ok:
+            self.start_mpv(self.channels[self.index])
+        else:
+            self.status = "error"
+            self.message = reason
+
+    def start_mpv(self, ch):
         if self.state != FULL:
-            self.ui.draw_modal("Connecting...")
             if ch["type"] == "tv": # release display only not in fullscreen and start playing TV
                 self.release_display()
-        ok = self.player.play(ch["url"])
-        if ok:
+        if self.player.play(ch["url"]):
             self.status = "playing"
             if ch["type"] == "tv":
                 self.state = FULL # go to fullscreen playback if tv is playing
@@ -268,6 +306,7 @@ class App:
                 self.leave_playback() # leave fullscreen playback if radio is playing
         else:
             self.status = "error"
+            self.message = "Cannot start mpv"
             self.leave_playback()
 
     def stop_playback(self):
@@ -317,16 +356,17 @@ class App:
     # ------------------------------------------------------------------- loop
     def check_player(self):
         if self.state == FULL and not self.player.running:
-            rc = self.player.proc.returncode if self.player.proc else None
-            log.error("mpv exited unexpectedly, exit code %s (negative = killed by signal)", rc)
+            reason = self.player.failure_reason()
+            log.error("mpv stopped: %s", reason)
             self.status = "error"
+            self.message = reason
             self.leave_playback()
 
     def draw(self):
         if self.state == MAIN:
             name = self.channels[self.index]["name"] if self.channels else ""
             logo = self.channels[self.index]["logo"] if self.channels else ""
-            self.ui.draw_main(self.focus, self.status, name, logo, self.index, len(self.channels))
+            self.ui.draw_main(self.focus, self.status, name, logo, self.index, len(self.channels), self.message)
         elif self.state == LIST:
             self.ui.draw_list(self.channels, self.list_sel, self.index)
         elif self.state == INFO:
@@ -346,6 +386,7 @@ class App:
                     act = self.translate(ev)
                     if act:
                         self.handle(act)
+            self.tick_probe()
             self.check_player()
             self.draw()
             self.clock.tick(30)

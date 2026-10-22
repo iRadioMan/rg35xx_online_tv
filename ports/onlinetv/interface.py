@@ -165,7 +165,7 @@ class Interface:
         pygame.display.flip()
 
     # ------------------------------------------------------------ main window
-    def draw_main(self, focus, status, channel_name, channel_logo, index, total):
+    def draw_main(self, focus, status, channel_name, channel_logo, index, total, message=""):
         self.screen.fill(BG)
         # preview placeholder (MPV draws over this area while a stream is on)
         pygame.draw.rect(self.screen, (9, 13, 21), PREVIEW, border_radius=14)
@@ -174,6 +174,7 @@ class Interface:
         labels = {
             "stopped": "Press Play to start",
             "playing": "Playing…",
+            "connecting": "Connecting…",
             "paused": "Paused",
             "error": "Stream stopped unexpectedly",
             "empty": "No channels in channels.json",
@@ -182,8 +183,9 @@ class Interface:
         self._logo(channel_logo)
         self._text(self.f_title, channel_name or "OnlineTV", (c[0], c[1] + 65),
                    WHITE, True, PREVIEW.w - 40)
-        self._text(self.f_body, labels.get(status, ""), (c[0], c[1] + 110),
-                   RED if status in ("error", "empty") else GRAY, True)
+        label = message if (status == "error" and message) else labels.get(status, "")
+        self._text(self.f_body, label, (c[0], c[1] + 110),
+                   RED if status in ("error", "empty") else GRAY, True, PREVIEW.w - 40)
         if total:
             self._text(self.f_small, f"{index + 1} / {total}",
                        (c[0], PREVIEW.bottom - 24), MUTED, True)
