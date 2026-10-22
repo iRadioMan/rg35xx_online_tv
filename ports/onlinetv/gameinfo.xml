@@ -3,7 +3,7 @@
   <game>
     <path>./OnlineTV.sh</path>
     <name>Online TV</name>
-    <desc>Online TV app for Anbernic RG35XXPRO.</desc>
+    <desc>Online TV app for Anbernic RG35XXPRO</desc>
     <releasedate>20261021T000000</releasedate>
     <developer>rad.io</developer>
     <publisher>rad.io</publisher>

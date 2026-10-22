@@ -10,9 +10,13 @@ Tested on Knulli `scarab-20260511`:
 - mpv: /usr/bin/mpv
 
 ## Install
-Copy the contents of `ports/` to `/userdata/roms/ports/` on the device
-(you get `OnlineTV.sh` plus the `onlinetv/` folder), then refresh the game list.
-Don't forget to connect to the Wi-Fi network!
+1. **Automatic (recommended):** download **rg35xx_online_tv.zip** release file and install via [PortMaster autoinstall](https://portmaster.games/faq.html#do-i-have-to-use-portmaster-to-install-ports)
+
+    **Manual:** Copy the contents of **zip** file to `/userdata/roms/ports/` on the device (you get `OnlineTV.sh` plus the `onlinetv/` folder)
+2. Refresh the game list
+3. Start `Online TV` from ports menu
+
+**Don't forget to connect to the Wi-Fi network!**
 
 ## Controls
 D-pad moves focus, **A** activates, **B** goes back / leaves full-screen / closes list and settings.

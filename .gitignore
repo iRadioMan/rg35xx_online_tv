@@ -4,5 +4,8 @@
 # Ignore all log files anywhere in the project
 *.log
 
+# Ignore all zip files
+*.zip
+
 # Python cache
 __pycache__/
