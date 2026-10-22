@@ -31,6 +31,7 @@ and mpv's stderr to `onlinetv/mpv.log`.
 ## Channels
 Edit `ports/onlinetv/channels.json` (`name`, `url` and `type` per channel). The bundled entries are public test streams.
 Type values are `tv` and `radio`.
+The `logo` field is the channel logo in base64 format (optional).
 
 ## Files
 - `main.py` - state machine (main / list / settings / full-screen), input, focus navigation
@@ -39,5 +40,4 @@ Type values are `tv` and `radio`.
 
 ### TODO
 
-- Store channel logos in channels.json
 - Settings?

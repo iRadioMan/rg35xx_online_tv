@@ -318,7 +318,8 @@ class App:
     def draw(self):
         if self.state == MAIN:
             name = self.channels[self.index]["name"] if self.channels else ""
-            self.ui.draw_main(self.focus, self.status, name, self.index, len(self.channels))
+            logo = self.channels[self.index]["logo"] if self.channels else ""
+            self.ui.draw_main(self.focus, self.status, name, logo, self.index, len(self.channels))
         elif self.state == LIST:
             self.ui.draw_list(self.channels, self.list_sel, self.index)
         elif self.state == INFO:
