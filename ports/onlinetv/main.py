@@ -227,10 +227,10 @@ class App:
         elif name == "next":
             self.select_channel(self.index + 1)
         elif name == "play":
-            if self.status == "stopped":
-                self.play_channel(self.index)
-            else:
+            if self.channels[self.index]["type"] == "radio" and self.status != "stopped":
                 self.stop_playback()
+            else:
+                self.play_channel(self.index)
         elif name == "list":
             if self.channels:
                 self.state = LIST
