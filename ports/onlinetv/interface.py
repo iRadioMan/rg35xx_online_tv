@@ -67,6 +67,7 @@ class Interface:
         self.f_title = self._font(font_path, 30, bold=True)
         self.f_body = self._font(font_path, 22)
         self.f_small = self._font(font_path, 16)
+        self.f_modal = self._font(font_path, 26)
 
     # ---------------------------------------------------------------- helpers
     @staticmethod
@@ -156,6 +157,13 @@ class Interface:
         img_rect = image.get_rect(center=LOGO_VIEW.center)
         self.screen.blit(image, img_rect)
 
+    # ------------------------------------------------------------ modal window
+    def draw_modal(self, text):
+        pygame.draw.rect(self.screen, BG, (120, 175, 400, 105), border_radius=14)
+        pygame.draw.rect(self.screen, BLUE, (120, 175, 400, 105), 1, border_radius=14)
+        self._text(self.f_body, text, (317, 226), WHITE, True)
+        pygame.display.flip()
+
     # ------------------------------------------------------------ main window
     def draw_main(self, focus, status, channel_name, channel_logo, index, total):
         self.screen.fill(BG)
@@ -179,9 +187,10 @@ class Interface:
         if total:
             self._text(self.f_small, f"{index + 1} / {total}",
                        (c[0], PREVIEW.bottom - 24), MUTED, True)
-
+            
         for name in BUTTONS:
             self._button(name, focus == name, playing=(status == "playing"))
+
         pygame.display.flip()
 
     # ----------------------------------------------------------- channel list

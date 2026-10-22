@@ -26,7 +26,7 @@ export APP_DEBUG=0
 # Optional mpv tuning (uncomment if the preview window does not appear):
 # export MPV_VO=gpu
 # export MPV_GPU_CONTEXT=drm
-# export MPV_HWDEC=auto-safe
+export MPV_HWDEC=auto-safe
 
 export SDL_VIDEODRIVER="${SDL_VIDEODRIVER:-}"
 [ -z "$SDL_VIDEODRIVER" ] && unset SDL_VIDEODRIVER
